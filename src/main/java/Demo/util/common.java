@@ -26,22 +26,23 @@ public class common {
     public static final String ResultSetToJsonStr(ResultSet rs) {
         ResultSetMetaData rsmd = null;
         String columnName, columnValue,strJson = null;
-        strJson="[\n";
+        strJson="[";
         try {
             rsmd = rs.getMetaData();
             while (rs.next()) {
-                strJson+="[\n";
+                strJson+="{";
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
                     columnName = rsmd.getColumnName(i + 1);
                     columnValue = rs.getString(columnName);
+                    strJson+="\""+columnName+"\":"+"";
                     strJson+="\""+columnValue+"\""+",";
                 }
                 strJson=strJson.substring(0,strJson.length()-1);
-                strJson+="\n],";
+                strJson+="},";
 //                ja.add(element);
             }
             strJson=strJson.substring(0,strJson.length()-1);
-            strJson+="\n]";
+            strJson+="]";
         } catch (SQLException e) {
             e.printStackTrace();
         }

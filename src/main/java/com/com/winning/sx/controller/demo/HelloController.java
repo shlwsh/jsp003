@@ -5,7 +5,9 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.*;
 //import java.*;
-import com.sun.org.apache.xpath.internal.operations.String;
+//import com.sun.org.apache.xpath.internal.operations.String;
+import com.google.gson.JsonObject;
+import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -98,11 +100,68 @@ public class HelloController {
     }
     @RequestMapping("/namelist")
     @ResponseBody
-    public Object namelist() throws IOException, SQLException {
+    public void namelist(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         Demo.mysql.mysqlDao db = new Demo.mysql.mysqlDao();
         db.connSQL();
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
 //        ResultSet rs = db.selectnamelist001();
         java.lang.String strJson = db.selectnamelist001();
-        return strJson;
+//        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+//        Map<String, String> map = new HashMap<String, String>();
+//        map.put("first_n", "1001");
+//        map.put("data", strJson);
+        strJson="[\"data\":\""+strJson+"\"]";
+        System.out.println(strJson);
+        out.println(strJson);
+        out.flush();
+        out.close();
+    }
+    @ResponseBody
+    @RequestMapping(value = {"/namelist1"})
+    public void getDatas(HttpServletResponse response) throws IOException, SQLException {
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("id", "1001");
+        map.put("name", "开心");
+        list.add(map);
+        String data = "[" +
+                "    {" +
+                "      \"first_name\": \"Tiger Nixon\"," +
+                "      \"second_name\": \"System Architect\"" +
+                "    }," +
+                "    {" +
+                "      \"first_name\": \"Garrett Winters\"," +
+                "      \"second_name\": \"Accountant\"" +
+                "    }" +
+                "  ]";
+        String data1 = "{\"data\":[{\"first_name\":\"Tiger Nixon\",\"second_name\":\"System Architect\"}"+
+                ",{\"first_name\":\"Herrod Chandler\",\"second_name\":\"Sales Assistant\"}]}";
+
+        JsonObject json = new JsonObject();
+        // 这个地方可以put一个字符串也可以put一个list，注意data和data1不一样
+        json.addProperty("data", data);
+
+
+        Demo.mysql.mysqlDao db = new Demo.mysql.mysqlDao();
+        db.connSQL();
+        response.setCharacterEncoding("UTF-8");
+//        PrintWriter out = response.getWriter();
+        java.lang.String strJson = db.selectnamelist001();
+        strJson="{\"data\":"+strJson+"}";
+
+        PrintWriter out = null;
+        try {
+//            response.setCharacterEncoding("UTF-8");
+            out = response.getWriter();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(data1);
+        System.out.println(strJson);
+        // 这个地方是将字符串输出到页面，可以写json.toString(),也可以直接写data1这种格式的json
+        out.println(strJson);
+        out.flush();
+        out.close();
     }
 }

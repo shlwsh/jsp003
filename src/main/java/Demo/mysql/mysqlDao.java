@@ -97,9 +97,11 @@ public class mysqlDao {
      */
     public String selectnamelist001()throws SQLException, IOException {
         PreparedStatement psql;
-        psql= conn.prepareStatement("select first_name,second_name from namelist order by code");
+        psql= conn.prepareStatement("select code,first_name  ,second_name  from namelist order by code");
         ResultSet res =psql.executeQuery();
         java.lang.String strjson = common.ResultSetToJsonStr(res);
+//        java.lang.String strjson = common.ResultSetToJsonString(res);
+        System.out.println(strjson);
         return strjson;
 //        String code,first_name,second_name;
 //        System.out.println("code------first_name-------second_name");
