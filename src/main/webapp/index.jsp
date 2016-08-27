@@ -56,6 +56,8 @@
     <br>
     <input type="submit" value="提交" />
     <input type="button" name="test" value="Test" onclick="test1();">
+    <input type="button" name="buttonDel" id="buttonDel" value="删除">
+    <input type="button" name="buttonSel" id="buttonSel" value="选择">
 </form>
 <hr>
 <ul id="list"> </ul>
@@ -88,7 +90,8 @@
 <!--第三步：初始化Datatables-->
 <script language="javascript">
 
-    $(document).ready($('#table_id_example').DataTable( {
+    $(document).ready($('#table_id_example').DataTable(
+            {
 //        data: data
         ajax: '/hello/namelist1',
         columns:[
@@ -98,8 +101,38 @@
         ]
 
 
-    } ));
+    }
+    )
+    );
+    var table = $('#table_id_example').DataTable();
 
+//    $('#table_id_example tbody').on( 'click', 'tr', function () {
+//        if ( $(this).hasClass('selected') ) {
+//            $(this).removeClass('selected');
+//        }
+//        else {
+//            table.$('tr.selected').removeClass('selected');
+//            $(this).addClass('selected');
+//        }
+//    } );
+
+    $('#table_id_example tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+    } );
+
+//    //单选行删除
+//    $('#buttonDel').click( function () {
+//        table.row('.selected').remove().draw( false );
+//    } );
+
+    //多选行删除
+        $('#buttonDel').click( function () {
+            table.rows('.selected').remove().draw( false );
+        } );
+
+    $('#buttonSel').click( function () {
+        alert( table.rows('.selected').data().length +' row(s) selected' );
+    } );
 </script>
 
 
