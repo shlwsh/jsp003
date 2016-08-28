@@ -8,12 +8,16 @@
     <%String basePath = request.getContextPath();%>
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="<%=basePath%>/conf/media/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/conf/media/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/conf/media/css/dataTables.bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>/conf/media/css/select.bootstrap.min.css">
     <!-- jQuery -->
     <script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/jquery.js"></script>
     <!-- DataTables -->
     <script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/jquery.dataTables.js"></script>
-    <script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/json2.js"></script>
+    <%--<script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/json2.js"></script>--%>
     <script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/sx_default.js"></script>
+    <script type="text/javascript" charset="utf8" src="<%=basePath%>/conf/media/js/winning-table.js"></script>
 </head>
 
 <body>
@@ -21,7 +25,7 @@
 <script language="javascript">
     function test_init() {
         $.ajax({
-                    url: '/hello/namelist1',
+                    url: '/hello/namelist',
                     type: 'Get',
                     dataType: 'json',
                     success:  function (data) {
@@ -32,6 +36,7 @@
                         $('#table_id_example').DataTable(
                                 {
                                     data: data,
+                                    destroy:true,
 //                                    ajax: '/hello/namelist1',
                                     columns:[
                                         {"data":"code","title":"code"},
@@ -60,6 +65,10 @@
         )
 
     };
+    var testData=[
+        [ '100','aa3aa','bb2bb','in3sert' ],
+        [ '1010','aa1aa','b1bbb','insert' ]
+    ];
     function test1() {
         $.ajax({
                     url: '/hello/namelist1',
@@ -67,18 +76,47 @@
                     dataType: 'json',
                     success:  function (data) {
 
-                        //成功执行方法
-                        var json = eval(data.data); //数组
 
-//                        var alldata=$('#table_id_example').dataTable().fnGetData();
+
+                        var dataJson = data;
+//                        var json = JSON.parse(dataJson);
+                        //成功执行方法
+//                        var strjson = JSON.stringify(data); //数组
+//                        var json = JSON.parse(strjson);
+
+                        var dataList = new Array();
+                        $.each(dataJson.data, function (index, item) {
+                                    //循环获取数据
+                                    var strItem = JSON.stringify(item);
+                                    var s1List = new Array();
+                                    for(var s1 in item){
+                                        s1List.push(""+item[s1]+"");
+                                    }
+                                    dataList.push(s1List);
+                                }
+                        );
+                        $('#table_id_example').DataTable(
+                                {
+                                    data: testData,
+//                                    ajax: '/hello/namelist1',
+                                    destroy:true,
+                                    columns:[
+                                        {"data":"code","title":"code"},
+                                        {"data":"first_name","title":"first_name"},
+                                        {"data":"second_name","title":"second_name"},
+                                        {"data":"userdb_status","title":"userdb_status"}
+                                    ]
+                                }
+                        );
+                        var alldata=$('#table_id_example').dataTable().fnGetData();
 //                        $('#table_id_example').data("jsondata",alldata);
 //                        json=$('#table_id_example').data("jsondata");
 
-                        $.each(json, function (index, item) {
+                        $.each(alldata, function (index, item) {
                                     //循环获取数据
-                                    var first_name = json[index].first_name;
-                                    var code = json[index].code;
-                                    var second_name = json[index].second_name;
+                                    var first_name = alldata[index].first_name;
+                                    var code = alldata[index].code;
+                                    var second_name = alldata[index].second_name;
                                     $("#list").html($("#list").html() + "<br>" + code + " - " + first_name + " - " + second_name + "<br/>");
                                 }
                         );
@@ -142,14 +180,18 @@
 
         $('#table_id_example').DataTable(
                 {
-//        data: data
+//                    data: testData,
                     ajax: '/hello/namelist1',
+                    destroy:true,
                     columns:[
                         {"data":"code","title":"code"},
                         {"data":"first_name","title":"first_name"},
                         {"data":"second_name","title":"second_name"},
                         {"data":"userdb_status","title":"userdb_status"}
-                    ]
+                    ],
+                buttons: [
+                                'excel', 'pdf', 'print'
+                            ]
                 }
         );
     }

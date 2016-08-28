@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.*;
-//import java.*;
-//import com.sun.org.apache.xpath.internal.operations.String;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -98,24 +98,30 @@ public class HelloController {
         return shop1;
 
     }
-    @RequestMapping("/namelist")
+    @RequestMapping("/namelist2")
     @ResponseBody
-    public void namelist(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
+    public List<Map<String,String>> namelist(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
         Demo.mysql.mysqlDao db = new Demo.mysql.mysqlDao();
         db.connSQL();
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
+//        response.setCharacterEncoding("UTF-8");
+//        PrintWriter out = response.getWriter();
 //        ResultSet rs = db.selectnamelist001();
-        java.lang.String strJson = db.selectnamelist001();
+        String strJsonList = db.selectnamelist003();
+        List<Map<String,String>> strList = new ArrayList<Map<String, String>>();
+
 //        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-//        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
 //        map.put("first_n", "1001");
-//        map.put("data", strJson);
-        strJson="[\"data\":\""+strJson+"\"]";
-        System.out.println(strJson);
-        out.println(strJson);
-        out.flush();
-        out.close();
+        String str = strJsonList.toString();
+        map.put("data", strJsonList.toString());
+        System.out.println(strJsonList.toString());
+        strList.add(map);
+        return strList;
+//        strJson="[\"data\":\""+strJson+"\"]";
+//        System.out.println(strJson);
+//        out.println(strJson);
+//        out.flush();
+//        out.close();
     }
     @ResponseBody
     @RequestMapping(value = {"/namelist1"})

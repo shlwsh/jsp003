@@ -1,6 +1,9 @@
 package Demo.mysql;
 
 import Demo.util.common;
+import com.google.gson.JsonArray;
+//import com.sun.org.apache.xpath.internal.operations.String;
+
 import  java.lang.*;
 import java.beans.Statement;
 import java.io.IOException;
@@ -103,20 +106,17 @@ public class mysqlDao {
 //        java.lang.String strjson = common.ResultSetToJsonString(res);
         System.out.println(strjson);
         return strjson;
-//        String code,first_name,second_name;
-//        System.out.println("code------first_name-------second_name");
-//        while(true){
-//            if (!(res.next())) break;
-//            code = res.getString("code");
-//            first_name = res.getString("first_name");
-//            first_name = new String(first_name.getBytes("latin1"),"utf-8");
-//
-//            second_name = res.getString("second_name");
-//            second_name = new String(second_name.getBytes("latin1"),"utf-8");
-//
-//            //ju_userName = new String(ju_userName.getBytes("ISO-8859-1"),"gb2312");
-////            System.out.println(first_name + "\t" + second_name);
-//            System.out.println(""+code+"\t\t"+first_name+"\t\t"+second_name+"");
+    }
+
+    public java.lang.String selectnamelist003()throws SQLException, IOException {
+        PreparedStatement psql;
+        psql= conn.prepareStatement("select code,first_name  ,second_name ,'original' as userdb_status from namelist order by code");
+        ResultSet res =psql.executeQuery();
+//        java.lang.String strjson = common.ResultSetToJsonStr(res);
+//        java.lang.String strjson = common.ResultSetToJsonString(res);
+        java.lang.String jaStr = common.ResultSetToJsonString(res);
+//        System.out.println(strjson);
+        return jaStr;
     }
     public void utfTran() {
         String testStr = "中国人民123";
@@ -237,7 +237,7 @@ public class mysqlDao {
      */
     public String selectnamelist002()throws SQLException, IOException {
         PreparedStatement psql;
-        psql= conn.prepareStatement("select first_name,second_name from namelist order by code");
+        psql= conn.prepareStatement("select first_name,second_name from namelist where code<20 order by code");
         ResultSet res =psql.executeQuery();
         java.lang.String strjson = common.ResultSetToJsonStr(res);
         return strjson;
