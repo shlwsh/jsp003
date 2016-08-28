@@ -23,52 +23,27 @@
 <body>
 <h1> hello World!</h1>
 <script language="javascript">
-    function test_init() {
-        $.ajax({
-                    url: '/hello/namelist',
-                    type: 'Get',
-                    dataType: 'json',
-                    success:  function (data) {
-//                        var alldata=$('#table_id_example').dataTable().fnGetData();
-                        $('#table_id_example').data("jsondata",data);
-                        json=$('#table_id_example').data("jsondata");
 
-                        $('#table_id_example').DataTable(
-                                {
-                                    data: data,
-                                    destroy:true,
-//                                    ajax: '/hello/namelist1',
-                                    columns:[
-                                        {"data":"code","title":"code"},
-                                        {"data":"first_name","title":"first_name"},
-                                        {"data":"second_name","title":"second_name"},
-                                        {"data":"userdb_status","title":"userdb_status"}
-                                    ]
-                                }
-                        );
-
-
-                        //成功执行方法
-
-                        $('#table_id_example').data("jsondata",data);
-                        var json = eval(data.data); //数组
-                        json=$('#table_id_example').data("jsondata");
-                        $.each(json, function (index, item) {
-                                    //循环获取数据
-                                    var first_name = json[index].first_name;
-                                    var code = json[index].code;
-                                    var second_name = json[index].second_name;
-                                    $("#list").html($("#list").html() + "<br>" + code + " - " + first_name + " - " + second_name + "<br/>");
-                                }
-                        );
-                    }}
-        )
-
-    };
     var testData=[
-        [ '100','aa3aa','bb2bb','in3sert' ],
-        [ '1010','aa1aa','b1bbb','insert' ]
+        [ "100","aa3aa","bb2bb","in3sert" ],
+        [ "1001","1aa3aa","1bb2bb","1in3sert" ]
     ];
+    function test11() {
+        $('#table_id_example').DataTable(
+                {
+                    data: testData,
+//                                    ajax: '/hello/namelist1',
+                    destroy:true,
+                    columns:[
+                        {title:"code"},
+                        {title:"first_name"},
+                        {title:"second_name"},
+                        {title:"userdb_status"}
+                    ]
+                }
+        );
+        return;
+    }
     function test1() {
         $.ajax({
                     url: '/hello/namelist1',
@@ -86,8 +61,12 @@
 
                         var dataList = new Array();
                         $.each(dataJson.data, function (index, item) {
+                                    if(index>5){
+                                        return;
+                                    }
                                     //循环获取数据
                                     var strItem = JSON.stringify(item);
+
                                     var s1List = new Array();
                                     for(var s1 in item){
                                         s1List.push(""+item[s1]+"");
@@ -95,38 +74,95 @@
                                     dataList.push(s1List);
                                 }
                         );
+
                         $('#table_id_example').DataTable(
                                 {
-                                    data: testData,
+                                    data: dataList,
 //                                    ajax: '/hello/namelist1',
                                     destroy:true,
                                     columns:[
-                                        {"data":"code","title":"code"},
-                                        {"data":"first_name","title":"first_name"},
-                                        {"data":"second_name","title":"second_name"},
-                                        {"data":"userdb_status","title":"userdb_status"}
+                                        {title:"code"},
+                                        {title:"first_name"},
+                                        {title:"second_name"},
+                                        {title:"userdb_status"}
                                     ]
                                 }
                         );
-                        var alldata=$('#table_id_example').dataTable().fnGetData();
-//                        $('#table_id_example').data("jsondata",alldata);
-//                        json=$('#table_id_example').data("jsondata");
-
-                        $.each(alldata, function (index, item) {
-                                    //循环获取数据
-                                    var first_name = alldata[index].first_name;
-                                    var code = alldata[index].code;
-                                    var second_name = alldata[index].second_name;
-                                    $("#list").html($("#list").html() + "<br>" + code + " - " + first_name + " - " + second_name + "<br/>");
-                                }
-                        );
-                    }}
+//                        var alldata=$('#table_id_example').dataTable().fnGetData();
+////                        $('#table_id_example').data("jsondata",alldata);
+////                        json=$('#table_id_example').data("jsondata");
+//
+//                        $.each(alldata, function (index, item) {
+//                                    //循环获取数据
+//                                    var first_name = alldata[index].first_name;
+//                                    var code = alldata[index].code;
+//                                    var second_name = alldata[index].second_name;
+//                                    $("#list").html($("#list").html() + "<br>" + code + " - " + first_name + " - " + second_name + "<br/>");
+//                                }
+//                        );
+                    }
+        }
         )
     };
-    function succFunction() {
-        alert("aaaaaa");
-    };
+    function test_tovaluelist() {
+        $.ajax({
+                    url: '/hello/namelist2',
+                    type: 'Get',
+                    dataType: 'json',
+                    success:  function (data) {
 
+
+
+                        var dataJson = eval("("+data+")");
+//                        var json = JSON.parse(dataJson);
+                        //成功执行方法
+//                        var strjson = JSON.stringify(data); //数组
+//                        var json = JSON.parse(strjson);
+                        var dataList = new Array();
+                        $.each(dataJson.data, function (index, item) {
+                                    if(index>5){
+                                        return;
+                                    }
+                                    //循环获取数据
+                                    var strItem = JSON.stringify(item);
+
+                                    var s1List = new Array();
+                                    for(var s1 in item){
+                                        s1List.push(""+item[s1]+"");
+                                    }
+                                    dataList.push(s1List);
+                                }
+                        );
+
+                        $('#table_id_example').DataTable(
+                                {
+                                    data: dataJson,
+//                                    ajax: '/hello/namelist1',
+                                    destroy:true,
+                                    columns:[
+                                        {title:"code"},
+                                        {title:"first_name"},
+                                        {title:"second_name"},
+                                        {title:"userdb_status"}
+                                    ]
+                                }
+                        );
+//                        var alldata=$('#table_id_example').dataTable().fnGetData();
+////                        $('#table_id_example').data("jsondata",alldata);
+////                        json=$('#table_id_example').data("jsondata");
+//
+//                        $.each(alldata, function (index, item) {
+//                                    //循环获取数据
+//                                    var first_name = alldata[index].first_name;
+//                                    var code = alldata[index].code;
+//                                    var second_name = alldata[index].second_name;
+//                                    $("#list").html($("#list").html() + "<br>" + code + " - " + first_name + " - " + second_name + "<br/>");
+//                                }
+//                        );
+                    }
+                }
+        )
+    };
 </script>
 
 <form name="fm001" action="/hello/Web003" method="post" >
@@ -137,7 +173,7 @@
     <input type="text" name="second_name" >
     <br>
     <input type="submit" value="提交" />
-    <input type="button" name="test" value="Test" onclick="test1();">
+    <input type="button" name="test" value="Test" onclick="test_tovaluelist();">
     <input type="button" name="buttonAdd" id="buttonAdd" value="新增">
     <input type="button" name="buttonDel" id="buttonDel" value="删除">
     <input type="button" name="buttonSel" id="buttonSel" value="选择">

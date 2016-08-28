@@ -10,14 +10,44 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by smq on 16/6/30.
  */
 public class common {
+
+    /***
+     * 根据数据集返回值列表
+     * @param rs
+     * @return
+     */
+    public static final List<ArrayList<String>> ResultSetToStrListOnlyValue(ResultSet rs) {
+        ResultSetMetaData rsmd = null;
+        List<ArrayList<String>> strList = new ArrayList<ArrayList<String>>();
+
+        String columnName, columnValue = null;
+
+        try {
+            rsmd = rs.getMetaData();
+            while (rs.next()) {
+                ArrayList<String> rowList = new ArrayList<String>();
+
+                for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                    columnName = rsmd.getColumnName(i + 1);
+                    columnValue = rs.getString(columnName);
+                    rowList.add("\""+columnValue+"\"");
+
+                }
+                strList.add(rowList);
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return strList;
+    }
     /***
      * 将数据集合转换成ＪＯＳＮ值串
      * @param rs

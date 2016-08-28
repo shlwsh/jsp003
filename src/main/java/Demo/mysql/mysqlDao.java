@@ -3,6 +3,7 @@ package Demo.mysql;
 import Demo.util.common;
 import com.google.gson.JsonArray;
 //import com.sun.org.apache.xpath.internal.operations.String;
+//import com.sun.org.apache.xpath.internal.operations.String;
 
 import  java.lang.*;
 import java.beans.Statement;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by smq on 16/7/23.
@@ -108,7 +111,7 @@ public class mysqlDao {
         return strjson;
     }
 
-    public java.lang.String selectnamelist003()throws SQLException, IOException {
+    public java.lang.String selectnamelist103()throws SQLException, IOException {
         PreparedStatement psql;
         psql= conn.prepareStatement("select code,first_name  ,second_name ,'original' as userdb_status from namelist order by code");
         ResultSet res =psql.executeQuery();
@@ -230,6 +233,20 @@ public class mysqlDao {
 
     }
     /***
+     * 返回列表并转为值列表
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public List<ArrayList<String>> selectnamelisttovaluelist()throws SQLException, IOException {
+        PreparedStatement psql;
+        psql= conn.prepareStatement("select code,first_name  ,second_name ,'original' as userdb_status from namelist order by code");
+        ResultSet res =psql.executeQuery();
+//        java.lang.String strjson = common.ResultSetToJsonStr(res);
+        List<ArrayList<String>> strList = common.ResultSetToStrListOnlyValue(res);
+        return strList;
+    }
+    /***
      * 返回列表并转为json串
      * @return
      * @throws SQLException
@@ -241,20 +258,6 @@ public class mysqlDao {
         ResultSet res =psql.executeQuery();
         java.lang.String strjson = common.ResultSetToJsonStr(res);
         return strjson;
-//        String code,first_name,second_name;
-//        System.out.println("code------first_name-------second_name");
-//        while(true){
-//            if (!(res.next())) break;
-//            code = res.getString("code");
-//            first_name = res.getString("first_name");
-//            first_name = new String(first_name.getBytes("latin1"),"utf-8");
-//
-//            second_name = res.getString("second_name");
-//            second_name = new String(second_name.getBytes("latin1"),"utf-8");
-//
-//            //ju_userName = new String(ju_userName.getBytes("ISO-8859-1"),"gb2312");
-////            System.out.println(first_name + "\t" + second_name);
-//            System.out.println(""+code+"\t\t"+first_name+"\t\t"+second_name+"");
     }
     //测试用例,动态传入参数
     public void runSql() throws SQLException {
