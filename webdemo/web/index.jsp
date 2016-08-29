@@ -29,6 +29,57 @@
         [ "1001","1aa3aa","1bb2bb","1in3sert" ]
     ];
     function test11() {
+        var alldata=$('#table_id_example').dataTable().fnGetData();
+        $('#table_id_example').data("jsondata",alldata);
+
+        //查找 --第一个字段默认为主键
+        var sqlList=Array();
+
+        for(var k=0;k<alldata.length;i++) {
+            var opStatus="";
+            var item = alldata[k];
+            for(var j=0;j<testData.length;i++) {
+                if(alldata[k][0] == testData[j][0]){
+                    for(var i=0;i<alldata[k].length;i++){
+                        if(alldata[k][i]!=testData[j][i]){
+                            item.push("update");
+                            opStatus = "update";
+                            sqlList.push(item);
+                            break;
+                        }
+                    }
+                    if(opStatus==""){
+                        opStatus="original";
+                    }
+                }
+            }
+            if(opStatus==""){
+                item.push("delete");
+                opStatus="delete";
+                sqlList.push(item);
+            }
+        }
+        console.log(sqlList);
+        //返向查找 --第一个字段默认为主键
+        for(var k=0;k<testData.length;i++) {
+            var opStatus="";
+            var item = testData[k];
+            for(var j=0;j<alldata.length;i++) {
+                var item1 = testData[j];
+                if(item[0] == item1[0]){
+                    opStatus = "original";
+                    break;
+                }
+            }
+            if(opStatus==""){
+                item.push("insert");
+                opStatus="insert";
+                sqlList.push(item);
+            }
+        }
+        console.log(sqlList);
+        return;
+//        json=$('#table_id_example').data("jsondata");
         $('#table_id_example').DataTable(
                 {
                     data: testData,
@@ -42,6 +93,7 @@
                     ]
                 }
         );
+
         return;
     }
     function test1() {
@@ -173,7 +225,7 @@
     <input type="text" name="second_name" >
     <br>
     <input type="submit" value="提交" />
-    <input type="button" name="test" value="Test" onclick="test_tovaluelist();">
+    <input type="button" name="test" value="Test" onclick="test11();">
     <input type="button" name="buttonAdd" id="buttonAdd" value="新增">
     <input type="button" name="buttonDel" id="buttonDel" value="删除">
     <input type="button" name="buttonSel" id="buttonSel" value="选择">
