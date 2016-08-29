@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/datatabledemo/datatabledemo.iml" filepath="$PROJECT_DIR$/datatabledemo/datatabledemo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jsp003.iml" filepath="$PROJECT_DIR$/jsp003.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webdemo/webdemo.iml" filepath="$PROJECT_DIR$/webdemo/webdemo.iml" />
     </modules>
   </component>
 </project>
