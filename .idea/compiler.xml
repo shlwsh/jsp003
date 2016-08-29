@@ -22,10 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="datatabledemo" />
         <module name="jsp003" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="datatabledemo" target="1.5" />
       <module name="jsp003" target="1.5" />
     </bytecodeTargetLevel>
   </component>
